@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Cinemática</title>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/5fb1d25b93.js" crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="estilo.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html"><em>Calculadora de Cinemática<br>Movimiento Periódico</em></a>
+     
+
+        </div>
+    </nav>
+    <!-- Main Content -->
+    <main>
+        <section class="container-fluid">
+            <div class="row">
+                <!-- Card 1: ¿Qué hace esta página? -->
+                <div class="col-12 col-md-3">
+                    <div class="card my-5 shadow-lg">
+                        <div class="card-body">
+                            <h2>¿Qué hace esta página?</h2>
+                            <p>Esta calculadora te permite simular el <strong>movimiento periódico</strong> de un objeto utilizando los conceptos de la cinemática. El objeto simulado se moverá de un lado a otro en un patrón sinusoidal.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 2: Recordemos -->
+                <div class="col-12 col-md-3">
+                    <div class="card my-5 shadow-lg">
+                        <div class="card-body">
+                            <h3>Recordemos</h3>
+                            <p>Un movimiento sinusoidal es un tipo de movimiento periódico que se caracteriza por una oscilación repetida y suave en el tiempo.</p>
+                            <h3>Valores que puedes ingresar:</h3>
+                            <ul>
+                                <li><strong>Amplitud (m):</strong> La distancia máxima que el objeto puede alcanzar desde su posición de equilibrio.</li>
+                                <li><strong>Frecuencia (Hz):</strong> El número de oscilaciones completas que el objeto realiza en un segundo.</li>
+                                <li><strong>Tiempo (s):</strong> El tiempo total durante el cual se simulará el movimiento del objeto.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 3: Fórmulas -->
+                <div class="col-12 col-md-3">
+                    <div class="card my-5 shadow-lg">
+                        <div class="card-body">
+                            <h3>Fórmulas que utiliza la simulación:</h3>
+                            <p>El movimiento del objeto está basado en la siguiente ecuación sinusoidal:</p>
+                            <p><strong>Desplazamiento (x) = Amplitud × sin(2π × Frecuencia × Tiempo)</strong></p>
+                            <ul>
+                                <li><strong>Desplazamiento (x):</strong> Es la distancia recorrida en un momento específico.</li>
+                                <li><strong>Amplitud:</strong> La distancia máxima desde el centro.</li>
+                                <li><strong>Frecuencia:</strong> La rapidez de oscilación.</li>
+                                <li><strong>Tiempo:</strong> El instante de tiempo en el que se calcula el desplazamiento.</li>
+                            </ul>
+                            <p>Este comportamiento es típico en movimientos ondulatorios y vibratorios.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <div class="card my-5 shadow-lg">
+                        <div class="card-body">
+                            <h3>¿Qué puedes hacer con esta herramienta?</h3>
+                            <p>En la simulación, el objeto (representado por un círculo ) <br>
+                                se mueve horizontalmente de un lado a otro, imitando un <strong>movimiento periódico</strong> <br>
+                                 (oscilatorio). Este tipo de movimiento se puede observar, por ejemplo, <br>
+                                  en un péndulo o en una masa atada a un resorte.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+        </section>
+        <!-- Formulario de cálculo -->
+        <section class="container-fluid">
+            <div class="row">
+
+                <div class="col-12 col-md-3">
+                    <div class="card my-3 shadow-lg">
+                        <div class="card-body">
+                            <form id="kinematicsForm">
+                                <label for="amplitude">Amplitud (m):</label><br>
+                                <input type="number" id="amplitude" name="amplitude" step="0.01" required><br><br>
+
+                                <label for="frequency">Frecuencia (Hz):</label><br>
+                                <input type="number" id="frequency" name="frequency" step="0.01" required><br><br>
+
+                                <label for="time">Tiempo (s):</label><br>
+                                <input type="number" id="time" name="time" step="0.01" required><br><br>
+
+                                <button type="submit" class="btn btn-primary">Calcular y Simular</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <div class="card my-3 shadow-lg">
+                        <div class="card-body">
+                            <div id="simulation">
+                                <div id="object"></div>
+                            </div>
+                        
+                            <div id="resultado">
+                                <br>
+                                <h3>Resultado del Desplazamiento:</h3>
+                                <p id="desplazamiento">El desplazamiento se mostrará aquí.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <script>
+                    // Se ejecuta cuando se envía el formulario
+                    document.getElementById('kinematicsForm').addEventListener('submit', function(event) {
+                        event.preventDefault();  // Previene la recarga de la página
+            
+                        // Obtener valores de entrada del formulario
+                        const amplitude = parseFloat(document.getElementById('amplitude').value);
+                        const frequency = parseFloat(document.getElementById('frequency').value);
+                        const totalTime = parseFloat(document.getElementById('time').value);
+            
+                        // Ejecutar la simulación
+                        simulate(amplitude, frequency, totalTime);
+                    });
+            
+                    // Función que simula el movimiento periódico
+                    function simulate(amplitude, frequency, totalTime) {
+                        const object = document.getElementById('object');  // Obtener el objeto que se moverá
+                        const simulation = document.getElementById('simulation');  // Área de simulación
+                        const width = simulation.clientWidth;  // Ancho del área de simulación
+                        const objectWidth = object.clientWidth;  // Ancho del objeto
+                        let t = 0;
+                        const interval = setInterval(() => {
+                            t += 0.02;  // Incrementar el tiempo cada 20 milisegundos
+                            const displacement = amplitude * Math.sin(2 * Math.PI * frequency * t);  // Calcular el desplazamiento
+                            object.style.left = `${(width / 2 - objectWidth / 2) + displacement}px`;  // Mover el objeto
+            
+                            // Mostrar el resultado del desplazamiento en pantalla
+                            document.getElementById('desplazamiento').textContent = `El desplazamiento es: ${displacement.toFixed(2)} metros.`;
+            
+                            if (t >= totalTime) clearInterval(interval);  // Detener la simulación cuando se alcance el tiempo total
+                        }, 20);  // Actualizar cada 20 milisegundos
+                    }
+                </script>
+
+            <div class="col-12 col-md-5">
+                <div class="card my-3 shadow-lg">
+                    <div class="card-body">
+                        <h3>¿Qué hace exactamente el objeto?</h3>
+                        <ul>
+                            <li>El objeto <strong>oscila</strong> en el área de simulación según una función sinusoidal.</li>
+                            <li>El <strong>desplazamiento</strong> del objeto desde el centro se calcula usando la fórmula:
+                                <br><br>
+                                <code>x(t) = A · sin(2πft)</code>
+                                <br><br>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-3">
+                <div class="card my-3 shadow-lg">
+                    <div class="card-body">
+                       <h3> Donde:</h3>
+                        <ul>
+                            <li><strong>A</strong> es la amplitud, que determina la distancia máxima que el objeto puede moverse desde su posición central.</li>
+                            <li><strong>f</strong> es la frecuencia, que determina cuántas oscilaciones completas realiza el objeto en un segundo.</li>
+                            <li><strong>t</strong> es el tiempo transcurrido, que aumenta conforme avanza la simulación.</li>
+                        </ul>
+                    </li>
+                    
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="card my-3 shadow-lg">
+                    <div class="card-body">
+                        <li>El movimiento se actualiza cada 20 milisegundos, lo que crea la animación suave del objeto moviéndose de un lado a otro en la pantalla.</li>
+                    <li><strong>Cuanto mayor sea la amplitud</strong>, el objeto se moverá más lejos desde el centro.</li>
+                    <li><strong>Cuanto mayor sea la frecuencia</strong>, más rápido será el movimiento del objeto.</li>
+                        <p>El objeto se detiene una vez que se alcanza el tiempo total especificado en el formulario.</p>
+
+                        <p>Este tipo de movimiento simula fenómenos como vibraciones, ondas o cualquier movimiento repetitivo que siga un patrón sinusoidal.</p>
+                    </div>
+                </div>
+            </div>
+
+
+
+            </div> 
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="text-center text-lg-start bg-white text-muted">
+        <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+            <div class="me-5 d-none d-lg-block"><span>Proyecto Final Fisica-2024:</span></div>
+            <div>
+                <a href="#" class="me-4 link-secondary"></a>
+                <a href="#" class="me-4 link-secondary"></a>
+                <a href="#" class="me-4 link-secondary"></a>
+                <a href="#" class="me-4 link-secondary"></a>
+                <a href="#" class="me-4 link-secondary"></a>
+                <a href="#" class="me-4 link-secondary"></a>
+            </div>
+        </section>
+
+        <section class="container text-center text-md-start mt-5">
+            <div class="row mt-3">
+                <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                    <h6 class="text-uppercase fw-bold mb-4"><i class="fas fa-gem me-3 text-secondary"></i>Calculadora de Cinemática<br>Movimiento Periódico</h6>
+                    <p>¡Bienvenido a tu portal para el conocimiento!</p>
+                </div>
+                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                    <h6 class="text-uppercase fw-bold mb-4">Contáctenos</h6>
+                    <p><a href="#!" class="text-reset">Sobre nosotros</a></p>
+                    <p><a href="#!" class="text-reset">Política de privacidad</a></p>
+                    <p><a href="#!" class="text-reset">PQRS</a></p>
+                    <p><a href="#!" class="text-reset">Preguntas frecuentes</a></p>
+                </div>
+           
+                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                    <h6 class="text-uppercase fw-bold mb-4">Integrantes</h6>
+                    <p>Juan Manuel Betancur</p>
+                    <p> Jonathan Arrieta</p>
+                    <p>Juan Esteban Gaviria</p>
+                    
+                </div>
+            </div>
+        </section>
+
+        <div class="text-center p-4">
+            © 2024 Calculadora de Cinemática Movimiento Periódico - Todos los derechos reservados.
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-QBfSwLJ8uSmhPzmJwz21HjQDRHq3jvbLEWQv3kwwyUHp8l87tb9Y3Uc7EsybgjZ7" crossorigin="anonymous"></script>
+    <!-- Custom JS -->
+    <script src="script.js"></script>
+</
